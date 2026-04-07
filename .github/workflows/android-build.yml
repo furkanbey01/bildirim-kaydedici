@@ -30,7 +30,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "20"
+          node-version: "18"
 
       # Set up Java JDK for Android build
       - name: Set up Java
@@ -40,11 +40,10 @@ jobs:
           java-version: '17'
 
       # Install Expo CLI and run the prebuild step to generate the native Android project
-   - name: Install dependencies and prebuild Android
+      - name: Install Expo CLI and prebuild Android project
         run: |
-     
+          npm install -g expo-cli
           cd bildirim-kaydedici
-                  npm install
           npx expo prebuild -p android --no-install
 
       # Build the Android release APK using Gradle
