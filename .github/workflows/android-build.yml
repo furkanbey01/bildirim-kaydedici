@@ -40,10 +40,11 @@ jobs:
           java-version: '17'
 
       # Install Expo CLI and run the prebuild step to generate the native Android project
-      - name: Install Expo CLI and prebuild Android project
+   - name: Install dependencies and prebuild Android
         run: |
-          npm install -g expo-cli
+     
           cd bildirim-kaydedici
+                  npm install
           npx expo prebuild -p android --no-install
 
       # Build the Android release APK using Gradle
