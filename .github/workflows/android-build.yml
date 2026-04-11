@@ -2,9 +2,9 @@
 # It expects a zip file named `bildirim-kaydedici.zip` in the repository root containing
 # the project folder `bildirim-kaydedici`. When triggered via a push to main or a
 # manual workflow dispatch, it unzips the project, sets up Node.js and the Java
-# environment, runs Expo's prebuild step to generate the native Android project,
-# and then uses Gradle to assemble a release APK. The resulting APK is published
-# as an artifact. Adjust the Node and Java versions as needed for your project.
+# environment, installs dependencies, runs Expo's prebuild step to generate the native
+# Android project, and then uses Gradle to assemble a debug APK. The resulting APK is
+# published as an artifact. Adjust the Node and Java versions as needed for your project.
 
 name: Build Android
 
@@ -39,22 +39,31 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      # Install Expo CLI and run the prebuild step to generate the native Android project
-      - name: Install Expo CLI and prebuild Android project
+      # Install project npm dependencies
+      - name: Install dependencies
         run: |
-          npm install -g expo-cli
+          cd bildirim-kaydedici
+          npm install
+
+      # Run the Expo prebuild step to generate the native Android project
+      - name: Prebuild Android project
+        run: |
           cd bildirim-kaydedici
           npx expo prebuild -p android --no-install
 
-      # Build the Android release APK using Gradle
+      # Ensure Gradle wrapper has execute permission on Linux
+      - name: Make Gradle wrapper executable
+        run: chmod +x bildirim-kaydedici/android/gradlew
+
+      # Build the Android debug APK using Gradle
       - name: Build Android APK
         run: |
           cd bildirim-kaydedici/android
-          ./gradlew assembleRelease
+          ./gradlew assembleDebug
 
       # Upload the generated APK as a workflow artifact
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: app-release
+          name: app-debug
           path: bildirim-kaydedici/android/app/build/outputs/**/*.apk

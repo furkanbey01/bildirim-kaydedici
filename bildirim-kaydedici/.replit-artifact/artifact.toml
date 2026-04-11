@@ -1,0 +1,27 @@
+kind = "mobile"
+previewPath = "/bildirim-kaydedici/"
+title = "Bildirim Kaydedici"
+version = "1.0.0"
+id = "artifacts/bildirim-kaydedici"
+router = "expo-domain"
+
+[[integratedSkills]]
+name = "expo"
+version = "1.0.0"
+
+[[services]]
+ensurePreviewReachable = "/status"
+name = "expo"
+paths = [ "/bildirim-kaydedici/" ]
+localPort = 19450
+
+[services.development]
+run = "pnpm --filter @workspace/bildirim-kaydedici run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/bildirim-kaydedici", "run", "build" ]
+run = [ "pnpm", "--filter", "@workspace/bildirim-kaydedici", "run", "serve" ]
+
+[services.env]
+PORT = "19450"
+BASE_PATH = "/bildirim-kaydedici/"
